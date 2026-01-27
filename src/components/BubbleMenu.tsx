@@ -97,38 +97,34 @@ export default function BubbleMenu({
   return (
     <>
       <div
-        className={`bubble-menu ${useFixedPosition ? 'fixed' : 'absolute'} left-0 right-0 top-8 flex items-center justify-between gap-4 px-8 pointer-events-none z-[1001] ${className || ''}`}
+        className={`bubble-menu ${useFixedPosition ? 'fixed' : 'absolute'} left-0 right-0 top-6 flex items-center justify-between gap-4 px-6 pointer-events-none z-[1001] ${className || ''}`}
         style={style}
       >
+        {/* Minimal text logo - no background box */}
         <motion.a
           href="#home"
           onClick={(e) => {
             e.preventDefault();
             handleNavClick('#home');
           }}
-          className="pointer-events-auto rounded-full px-5 py-3 font-bold text-lg"
-          style={{ background: menuBg, color: menuContentColor }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className="pointer-events-auto font-bold text-xl tracking-tighter text-foreground hover:text-primary transition-colors"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          {typeof logo === 'string' ? (
-            <span className="font-bold">{logo}</span>
-          ) : (
-            logo
-          )}
+          {typeof logo === 'string' ? logo : logo}
         </motion.a>
 
+        {/* Hamburger menu button */}
         <motion.button
           onClick={handleToggle}
           aria-label={menuAriaLabel}
-          className="pointer-events-auto w-14 h-14 rounded-full flex flex-col items-center justify-center gap-1.5"
-          style={{ background: menuBg }}
+          className="pointer-events-auto w-12 h-12 rounded-full flex flex-col items-center justify-center gap-1.5 border border-border/50 backdrop-blur-sm"
+          style={{ background: `${menuBg}/80` }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <motion.span
-            className="block w-6 h-0.5 rounded-full"
-            style={{ background: menuContentColor }}
+            className="block w-5 h-0.5 rounded-full bg-foreground"
             animate={{
               rotate: isMenuOpen ? 45 : 0,
               y: isMenuOpen ? 4 : 0,
@@ -136,14 +132,12 @@ export default function BubbleMenu({
             transition={{ duration: 0.3 }}
           />
           <motion.span
-            className="block w-6 h-0.5 rounded-full"
-            style={{ background: menuContentColor }}
+            className="block w-5 h-0.5 rounded-full bg-foreground"
             animate={{ opacity: isMenuOpen ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           />
           <motion.span
-            className="block w-6 h-0.5 rounded-full"
-            style={{ background: menuContentColor }}
+            className="block w-5 h-0.5 rounded-full bg-foreground"
             animate={{
               rotate: isMenuOpen ? -45 : 0,
               y: isMenuOpen ? -4 : 0,
@@ -162,7 +156,7 @@ export default function BubbleMenu({
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-8"
             style={{ 
-              background: 'hsl(var(--background) / 0.95)', 
+              background: 'hsl(var(--background) / 0.98)', 
               backdropFilter: 'blur(20px)',
             }}
           >
@@ -170,12 +164,12 @@ export default function BubbleMenu({
               {menuItems.map((item, idx) => (
                 <motion.div
                   key={item.label}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
+                  initial={{ scale: 0, opacity: 0, y: 50 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0, opacity: 0, y: 20 }}
                   transition={{ 
                     duration: 0.5,
-                    delay: idx * 0.1,
+                    delay: idx * 0.08,
                     type: "spring",
                     stiffness: 200,
                     damping: 15
@@ -190,9 +184,9 @@ export default function BubbleMenu({
                       e.preventDefault();
                       handleNavClick(item.href);
                     }}
-                    className="flex items-center justify-center rounded-full px-8 py-6 text-2xl md:text-3xl font-bold capitalize cursor-pointer"
+                    className="flex items-center justify-center rounded-full px-8 py-6 text-2xl md:text-3xl font-bold capitalize cursor-pointer border border-border/30"
                     style={{
-                      background: menuBg,
+                      background: 'hsl(var(--card) / 0.8)',
                       color: menuContentColor,
                       minHeight: '100px',
                       rotate: `${item.rotation ?? 0}deg`,
@@ -201,6 +195,7 @@ export default function BubbleMenu({
                       scale: 1.06,
                       backgroundColor: item.hoverStyles?.bgColor || 'hsl(42 58% 58%)',
                       color: item.hoverStyles?.textColor || '#ffffff',
+                      borderColor: 'transparent',
                     }}
                     whileTap={{ scale: 0.94 }}
                     transition={{ duration: 0.2 }}
