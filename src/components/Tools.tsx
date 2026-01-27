@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer, defaultViewport } from "@/lib/animations";
+import { fadeInUp, staggerContainer, defaultViewport, scaleIn } from "@/lib/animations";
 import { tools } from "@/lib/data";
 import { toolIconMap } from "@/components/icons/ToolIcons";
+import AnimatedContent from "@/components/AnimatedContent";
 
 const Tools = () => {
   return (
-    <section className="section-padding bg-card/30 overflow-hidden">
+    <section className="section-padding bg-card/30">
       <div className="container mx-auto">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.span
             variants={fadeInUp}
@@ -35,50 +36,32 @@ const Tools = () => {
           {tools.map((tool, index) => {
             const IconComponent = toolIconMap[tool.name];
             return (
-              <motion.div
+              <AnimatedContent
                 key={tool.name}
-                initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.08,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                whileHover={{ 
-                  y: -8, 
-                  scale: 1.05,
-                  transition: { duration: 0.3, ease: "easeOut" }
-                }}
-                className="card-cinematic p-6 text-center group cursor-default"
+                distance={60}
+                direction="vertical"
+                duration={0.8}
+                delay={index * 0.08}
+                threshold={0.2}
               >
-                <motion.div 
-                  className="w-14 h-14 mx-auto mb-3 rounded-xl bg-secondary/50 flex items-center justify-center overflow-hidden"
-                  whileHover={{ 
-                    backgroundColor: 'hsl(42 58% 58% / 0.2)',
-                    rotate: [0, -5, 5, 0],
-                    transition: { duration: 0.5 }
-                  }}
+                <motion.div
+                  variants={scaleIn}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="card-cinematic p-6 text-center group cursor-default h-full"
                 >
-                  {IconComponent ? (
-                    <motion.div
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.15 }}
-                      transition={{ duration: 0.3 }}
-                    >
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-lg bg-secondary/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors overflow-hidden">
+                    {IconComponent ? (
                       <IconComponent size={36} />
-                    </motion.div>
-                  ) : (
-                    <span className="text-2xl font-bold text-primary">
-                      {tool.name.charAt(0)}
-                    </span>
-                  )}
+                    ) : (
+                      <span className="text-2xl font-bold text-primary">
+                        {tool.name.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="text-sm font-medium mb-1">{tool.name}</h4>
+                  <p className="text-xs text-muted-foreground">{tool.category}</p>
                 </motion.div>
-                <h4 className="text-sm font-medium mb-1 group-hover:text-primary transition-colors">
-                  {tool.name}
-                </h4>
-                <p className="text-xs text-muted-foreground">{tool.category}</p>
-              </motion.div>
+              </AnimatedContent>
             );
           })}
         </motion.div>

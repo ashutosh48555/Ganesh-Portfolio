@@ -5,7 +5,7 @@ const menuItems = navLinks.map((link, index) => ({
   label: link.name.toLowerCase(),
   href: link.href,
   ariaLabel: link.name,
-  rotation: index % 2 === 0 ? -6 : 6,
+  rotation: index % 2 === 0 ? -8 : 8,
   hoverStyles: { 
     bgColor: 'hsl(42 58% 58%)', 
     textColor: '#ffffff' 
@@ -15,7 +15,7 @@ const menuItems = navLinks.map((link, index) => ({
 const Navigation = () => {
   return (
     <BubbleMenu
-      logo="GANESH"
+      logo={<span className="font-bold tracking-tighter">GANESH</span>}
       items={menuItems}
       menuAriaLabel="Toggle navigation"
       menuBg="hsl(var(--card))"
