@@ -17,12 +17,12 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden film-grain"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent" />
+      {/* Hero-specific glow overlay */}
+      <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-transparent to-transparent" />
       
-      {/* Particle effects */}
+      {/* Enhanced particle effects for hero */}
       <ParticleField />
 
       {/* Content */}
