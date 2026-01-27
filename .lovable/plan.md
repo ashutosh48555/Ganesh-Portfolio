@@ -1,144 +1,169 @@
 
-# Implementation Plan: Remove CurvedLoop & Add MagicBento Component
+# Premium Cinematic Portfolio for Ganesh — VFX Artist
 
-## Overview
-This plan will remove the CurvedLoop component from the Tools section and integrate a customized MagicBento grid component to showcase VFX projects or skills in an interactive, visually stunning way that matches the cinematic amber/gold theme.
-
-## Best Placement for MagicBento
-After analyzing the site structure, the **MagicBento component would work best as a Featured Work showcase** between the Skills section and Portfolio section. This creates a visual highlight before the full portfolio grid, featuring 6 key project categories or specializations with interactive effects.
+## Vision
+A dark, cinematic portfolio website that feels like stepping into a post-production suite. The design emphasizes **mood, lighting, and realism** — the same principles Ganesh applies to his VFX work. Warm amber accents evoke film lighting and golden hour cinematography, while smooth, physically-weighted animations create an immersive experience worthy of impressing film, advertising, and gaming clients.
 
 ---
 
-## Technical Implementation
+## Design Language
 
-### 1. Remove CurvedLoop from Tools Section
-**File:** `src/components/Tools.tsx`
+### Color Palette
+- **Background**: Deep charcoal (#0A0A0F) — not pure black, with subtle film grain texture
+- **Foreground**: Warm off-white (#F5F0E8) — soft, easy on eyes
+- **Accent**: Warm amber/gold (#D4A853) — used sparingly for highlights, CTAs, and interactive elements
+- **Muted**: Cool gray (#6B7280) — secondary text
 
-Changes:
-- Remove the CurvedLoop import
-- Remove the CurvedLoop wrapper div (lines 31-41)
-- Keep the tool icons grid with existing animations
+### Typography
+- **Headlines**: Large, bold, cinematic with tight letter-spacing
+- **Body**: Clean, readable sans-serif
+- **Hierarchy**: Clear visual flow from H1 → body → captions
 
-### 2. Create MagicBento Component
-**New File:** `src/components/MagicBento.tsx`
-
-The component will be customized to match the portfolio theme:
-- **Color Scheme:** Amber/gold glow (`212, 168, 83` - matching the primary color `#D4A853`)
-- **Card Data:** VFX-specific categories (Lighting, Compositing, CG Integration, Personal Projects, Automotive, Architectural)
-- **Features Enabled:**
-  - `enableStars` - Floating particles on hover
-  - `enableSpotlight` - Global spotlight following cursor
-  - `enableBorderGlow` - Amber border glow effect
-  - `enableTilt` - 3D tilt on hover
-  - `clickEffect` - Ripple effect on click
-  - `textAutoHide` - Text fades on hover for cleaner look
-
-### 3. Integrate into Index Page
-**File:** `src/pages/Index.tsx`
-
-Add the MagicBento component between Skills and Portfolio sections:
-```text
-<Hero />
-<About />
-<Skills />
-<MagicBento /> ← New component here
-<Tools />
-<Portfolio />
-<Contact />
-```
+### Motion Principles
+- Spring-based easing for organic, weighted feel
+- Staggered reveals for cinematic drama
+- Parallax depth on scroll
+- Subtle hover states that respond to user presence
 
 ---
 
-## Component Customization Details
+## Site Structure
 
-### Card Data (VFX-Themed)
-```text
-┌─────────────────┬─────────────────┬───────────────────────┐
-│   LIGHTING      │   COMPOSITING   │                       │
-│   Master of     │   Seamless      │    CG INTEGRATION     │
-│   atmosphere    │   blending      │    (Large Card)       │
-├─────────────────┼─────────────────┤    Matching CG to     │
-│                 │   PERSONAL      │    live action        │
-│   AUTOMOTIVE    │   Creative      │                       │
-│   (Large Card)  │   exploration   ├───────────────────────┤
-│   Showroom      ├─────────────────┤    ARCHITECTURAL      │
-│   quality       │                 │    Photorealistic     │
-│                 │                 │    visualization      │
-└─────────────────┴─────────────────┴───────────────────────┘
-```
+### 1. Hero Section
+**"Creating clean, cinematic VFX visuals"**
+- Full-viewport cinematic hero with animated text reveal
+- Name "GANESH" with staggered character animation
+- Floating skill tags: Lighting • Compositing • CG Integration
+- Animated particles/dust to suggest film atmosphere
+- Smooth scroll indicator
 
-### Visual Styling
-- **Background:** Deep charcoal (`#060010` → adjusted to match `--card` color)
-- **Glow Color:** `212, 168, 83` (amber matching `--primary`)
-- **Border:** Subtle amber glow on hover
-- **Animation:** Staggered particle effects with amber/gold colors
+### 2. About Section
+- Ganesh's bio with fade-in reveal
+- Philosophy statement about realism and mood
+- Photo placeholder with cinematic crop
 
-### Framer Motion Integration
-Since the project uses Framer Motion (not GSAP to avoid React conflicts), the MagicBento will be adapted:
-- Replace GSAP animations with Framer Motion equivalents
-- Use `motion.div` for tilt effects
-- Use `AnimatePresence` for particle spawning
-- Maintain smooth 60fps animations
+### 3. Skills Section
+**Three Tiers with Visual Hierarchy**
 
----
+**Core Strengths** (prominent cards with glow):
+- Lighting
+- Compositing  
+- CG Integration
 
-## Files to Modify
+**VFX & Design Skills** (grid of icons):
+- Texturing, Animation, Modeling, Sculpting, FX, Motion Graphics, Roto, Matchmove
 
-| File | Action |
-|------|--------|
-| `src/components/Tools.tsx` | Remove CurvedLoop import and usage |
-| `src/components/MagicBento.tsx` | Create new (Framer Motion version) |
-| `src/pages/Index.tsx` | Add MagicBento between Skills and Portfolio |
-| `src/components/CurvedLoop.tsx` | Can be deleted (no longer used) |
+**Game & Environment Work** (secondary tier):
+- Base Game Designing, Level Design, Environment Design, Real-Time Lighting
 
----
+### 4. Tools Section
+Professional icon grid showcasing software proficiency:
+- Blender, Maya, Adobe Premiere Pro, After Effects, Photoshop
+- Nuke, Silhouette, 3D Equalizer, Houdini, Unreal Engine
 
-## Animation Features
+### 5. Portfolio Section
+**Filterable Project Grid**
+- Category filters: All | Lighting | Compositing | CG Integration | Personal
+- Project cards with:
+  - Hover parallax effect on thumbnail
+  - Title + category reveal on hover
+  - Click opens detailed case study
 
-### Spotlight Effect
-- Large ambient glow following cursor across the grid
-- Intensity increases near card boundaries
-- Smooth transitions using spring physics
+### 6. Case Study Modal/Page
+- Hero image/video
+- Project overview
+- Before/After slider comparison
+- Shot breakdown with process steps
+- Tools used (icon tags)
+- Close button with smooth transition
 
-### Border Glow
-- Radial gradient border that follows cursor position
-- Intensity based on proximity to card center
-- Amber/gold color matching theme
+### 7. Contact Section
+- Minimal contact form (Name, Email, Message)
+- Visual-only for now (ready for backend integration later)
+- Direct email link: mailto:ganesh@email.com
+- Social icons with hover animations
+- Professional CTA: "Let's create something cinematic"
 
-### Particle Stars
-- Small floating particles on hover
-- Random movement with subtle opacity pulsing
-- Spawn in staggered pattern
-
-### Tilt Effect
-- 3D perspective tilt based on cursor position
-- Max rotation: ±10 degrees
-- Smooth spring-based return on mouse leave
-
-### Click Ripple
-- Expanding radial gradient from click point
-- Fades out with scale animation
-- Amber color with transparency
+### 8. Footer
+- Navigation links
+- Social links
+- Copyright
 
 ---
 
-## Responsive Design
+## Key Animations (Cinematic Suite)
 
-```text
-Mobile (< 600px):     1 column, full width cards
-Tablet (600-1024px):  2 columns
-Desktop (> 1024px):   4 columns with spanning cards
-```
+1. **Hero Intro Sequence**
+   - Title characters animate in with stagger (0.05s delay each)
+   - Tagline fades up from below
+   - Particle/dust animation starts after text settles
 
-The bento grid maintains visual hierarchy at all breakpoints while preserving interactivity (particles disabled on mobile for performance).
+2. **Scroll-Triggered Section Reveals**
+   - Sections fade + scale from 95% to 100%
+   - Staggered children for content blocks
+   - Intersection Observer triggers at 20% visibility
+
+3. **Project Card Interactions**
+   - Image subtle parallax on hover (3D tilt)
+   - Overlay slides up revealing title + category
+   - Cursor changes to custom "View" indicator
+
+4. **Micro-Interactions**
+   - Buttons: Subtle scale (1.02) + glow on hover
+   - Navigation links: Underline animation
+   - Form fields: Border glow on focus
+   - Icons: Rotate or pulse on hover
+
+5. **Lightbox/Modal**
+   - Backdrop blur fade-in
+   - Modal scales up from 95%
+   - Content staggers in after modal settles
 
 ---
 
-## Expected Result
+## Features Included
 
-A stunning interactive grid showcasing 6 VFX specialization areas with:
-- Cinema-quality amber glow effects
-- Smooth hover animations and 3D tilt
-- Click feedback with ripple effects
-- Particle effects that match the existing ClickSpark aesthetic
-- Perfect integration with the dark cinematic theme
+### Core Features
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Smooth scroll behavior
+- ✅ Dark cinematic theme with amber accents
+- ✅ Full animation suite with Framer Motion
+- ✅ Portfolio grid with category filters
+- ✅ Project lightbox/modal for case studies
+- ✅ Before/After comparison slider
+- ✅ Contact form (visual, ready for backend)
+- ✅ Accessible navigation and focus states
+
+### Technical Implementation
+- React + TypeScript + Vite (already set up)
+- Tailwind CSS with custom design tokens
+- Framer Motion for all animations
+- Lazy loading for images
+- Semantic HTML with ARIA labels
+- Mobile-first responsive approach
+
+---
+
+## Content Placeholders
+
+Since content is not ready yet, I'll include:
+- High-quality cinematic placeholder images
+- Sample project titles (e.g., "Sci-Fi Environment", "Product CG Integration")
+- Placeholder video embeds
+- Before/After sample images
+- All easily replaceable with Ganesh's real content
+
+---
+
+## Deliverables
+
+This implementation will include:
+1. **Complete page structure** — All sections from hero to footer
+2. **Design system** — Custom Tailwind configuration with amber accent
+3. **Reusable components** — ProjectCard, SkillCard, CaseStudyModal, BeforeAfter slider
+4. **Animation variants** — Centralized Framer Motion configurations
+5. **Placeholder content** — Professional placeholders matching VFX aesthetic
+6. **Responsive layout** — Works beautifully on all devices
+7. **Accessibility** — Keyboard navigation, focus states, semantic HTML
+
+The result will be a production-ready, cinematic portfolio that feels custom-built for a professional VFX artist — not a generic template.
