@@ -490,7 +490,10 @@ class Spheres extends InstancedMesh {
     const envTexture = pmrem.fromScene(roomEnv).texture;
     const geometry = new SphereGeometry(1, 32, 32);
     const material = new SubsurfaceMaterial({ envMap: envTexture, ...config.materialParams });
-    (material as any).envMapRotation.x = -Math.PI / 2;
+    // envMapRotation only exists in Three.js r152+
+    if ((material as any).envMapRotation) {
+      (material as any).envMapRotation.x = -Math.PI / 2;
+    }
     super(geometry, material, config.count);
 
     this.config = config;
