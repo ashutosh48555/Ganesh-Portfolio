@@ -38,6 +38,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const Skills = () => {
+  const skillsText = "Lighting ✦ Compositing ✦ CG Integration ✦ Texturing ✦ Animation ✦ VFX ✦ Motion Graphics ✦ Rendering ✦ Color Grading";
+
   return (
     <section id="skills" className="section-padding">
       <div className="container mx-auto">
@@ -46,7 +48,7 @@ const Skills = () => {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.span
             variants={fadeInUp}
@@ -57,6 +59,36 @@ const Skills = () => {
           <motion.h2 variants={fadeInUp} className="heading-lg mt-4">
             Skills & Specializations
           </motion.h2>
+        </motion.div>
+
+        {/* Skills Marquee Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-16 overflow-hidden"
+        >
+          <motion.p 
+            className="text-2xl md:text-4xl lg:text-5xl font-bold text-center text-primary/80 tracking-wide"
+            animate={{ 
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+            style={{
+              background: "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary)/0.6), hsl(var(--primary)))",
+              backgroundSize: "200% 100%",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            {skillsText}
+          </motion.p>
         </motion.div>
 
         {/* Core Strengths */}
