@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Ballpit from "./Ballpit";
 
 const AnimatedBackground = () => {
   return (
@@ -6,11 +7,26 @@ const AnimatedBackground = () => {
       {/* Base gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background" />
       
-      {/* Animated gradient orbs */}
+      {/* 3D Ballpit - Interactive physics balls */}
+      <div 
+        className="absolute inset-0 pointer-events-auto opacity-40"
+        style={{ minHeight: '100vh' }}
+      >
+        <Ballpit
+          count={80}
+          gravity={0.005}
+          friction={0.998}
+          wallBounce={0.9}
+          followCursor={true}
+          colors={[0xD4A853, 0x8B7355, 0x4A3F35]}
+        />
+      </div>
+
+      {/* Animated gradient orbs - layered on top */}
       <motion.div
-        className="absolute w-[800px] h-[800px] rounded-full opacity-20"
+        className="absolute w-[800px] h-[800px] rounded-full opacity-15 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, hsl(42 58% 58% / 0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(42 58% 58% / 0.12) 0%, transparent 70%)",
           left: "-20%",
           top: "-10%",
         }}
@@ -27,9 +43,9 @@ const AnimatedBackground = () => {
       />
       
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-15"
+        className="absolute w-[600px] h-[600px] rounded-full opacity-10 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, hsl(42 58% 58% / 0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(42 58% 58% / 0.08) 0%, transparent 70%)",
           right: "-10%",
           top: "20%",
         }}
@@ -44,29 +60,10 @@ const AnimatedBackground = () => {
           ease: "easeInOut",
         }}
       />
-      
-      <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full opacity-10"
-        style={{
-          background: "radial-gradient(circle, hsl(240 20% 20% / 0.5) 0%, transparent 70%)",
-          left: "30%",
-          bottom: "-20%",
-        }}
-        animate={{
-          x: [0, 60, -30, 0],
-          y: [0, -60, -30, 0],
-          scale: [1, 1.2, 0.9, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
 
       {/* Flowing lines / mesh effect */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-[0.03]"
+        className="absolute inset-0 w-full h-full opacity-[0.02] pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -89,7 +86,7 @@ const AnimatedBackground = () => {
 
       {/* Animated lines that flow across */}
       <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[30%] opacity-10"
+        className="absolute h-px w-[200%] left-[-50%] top-[30%] opacity-5 pointer-events-none"
         style={{
           background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
         }}
@@ -104,7 +101,7 @@ const AnimatedBackground = () => {
       />
       
       <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[50%] opacity-10"
+        className="absolute h-px w-[200%] left-[-50%] top-[50%] opacity-5 pointer-events-none"
         style={{
           background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
         }}
@@ -119,7 +116,7 @@ const AnimatedBackground = () => {
       />
       
       <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[70%] opacity-10"
+        className="absolute h-px w-[200%] left-[-50%] top-[70%] opacity-5 pointer-events-none"
         style={{
           background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
         }}
@@ -134,35 +131,11 @@ const AnimatedBackground = () => {
         }}
       />
 
-      {/* Floating particles with glow */}
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-primary/30"
-          style={{
-            left: `${10 + (i * 6)}%`,
-            top: `${20 + ((i * 13) % 60)}%`,
-            boxShadow: "0 0 10px hsl(42 58% 58% / 0.3)",
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.5, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: 4 + (i % 3),
-            delay: i * 0.3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
       {/* Subtle vignette overlay */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 0%, hsl(240 20% 4% / 0.4) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 0%, hsl(240 20% 4% / 0.5) 100%)",
         }}
       />
     </div>
