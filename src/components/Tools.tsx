@@ -2,11 +2,8 @@ import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, defaultViewport } from "@/lib/animations";
 import { tools } from "@/lib/data";
 import { toolIconMap } from "@/components/icons/ToolIcons";
-import CurvedLoop from "@/components/CurvedLoop";
 
 const Tools = () => {
-  const skillsText = "Lighting ✦ Compositing ✦ CG Integration ✦ Texturing ✦ Animation ✦ VFX ✦ Motion Graphics ✦";
-
   return (
     <section className="section-padding bg-card/30 overflow-hidden">
       <div className="container mx-auto">
@@ -15,7 +12,7 @@ const Tools = () => {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center mb-8"
+          className="text-center mb-12"
         >
           <motion.span
             variants={fadeInUp}
@@ -27,18 +24,6 @@ const Tools = () => {
             Industry-Standard Toolkit
           </motion.h2>
         </motion.div>
-
-        {/* Curved Loop Skills Marquee */}
-        <div className="mb-12 -mx-6 md:-mx-12">
-          <CurvedLoop
-            marqueeText={skillsText}
-            speed={1.5}
-            curveAmount={80}
-            direction="left"
-            interactive
-            className="opacity-60"
-          />
-        </div>
 
         <motion.div
           variants={staggerContainer}
