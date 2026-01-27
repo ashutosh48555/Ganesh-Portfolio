@@ -141,16 +141,16 @@ export const gameSkills = [
 ];
 
 export const tools = [
-  { name: "Blender", category: "3D" },
-  { name: "Maya", category: "3D" },
-  { name: "Nuke", category: "Compositing" },
-  { name: "Silhouette", category: "Compositing" },
-  { name: "After Effects", category: "Motion" },
-  { name: "Premiere Pro", category: "Editing" },
-  { name: "Photoshop", category: "2D" },
-  { name: "3D Equalizer", category: "Tracking" },
-  { name: "Houdini", category: "FX" },
-  { name: "Unreal Engine", category: "Real-Time" },
+  { name: "Blender", category: "3D", icon: "Box" },
+  { name: "Maya", category: "3D", icon: "Shapes" },
+  { name: "Nuke", category: "Compositing", icon: "Layers" },
+  { name: "Silhouette", category: "Compositing", icon: "Scissors" },
+  { name: "After Effects", category: "Motion", icon: "Sparkles" },
+  { name: "Premiere Pro", category: "Editing", icon: "Film" },
+  { name: "Photoshop", category: "2D", icon: "Image" },
+  { name: "3D Equalizer", category: "Tracking", icon: "Target" },
+  { name: "Houdini", category: "FX", icon: "Flame" },
+  { name: "Unreal Engine", category: "Real-Time", icon: "Gamepad2" },
 ];
 
 export const socialLinks = [
