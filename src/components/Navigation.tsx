@@ -21,9 +21,6 @@ const Navigation = () => {
       menuBg="hsl(var(--card))"
       menuContentColor="hsl(var(--foreground))"
       useFixedPosition={true}
-      animationEase="back.out(1.5)"
-      animationDuration={0.5}
-      staggerDelay={0.12}
     />
   );
 };
