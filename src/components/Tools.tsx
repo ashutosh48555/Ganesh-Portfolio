@@ -41,7 +41,6 @@ const Tools = () => {
                 distance={60}
                 direction="vertical"
                 duration={0.8}
-                ease="back.out(1.5)"
                 delay={index * 0.08}
                 threshold={0.2}
               >
