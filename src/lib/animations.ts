@@ -1,5 +1,6 @@
 // Centralized Framer Motion animation variants for cinematic portfolio
 import { Variants } from "framer-motion";
+const cinematicEase = [0.16, 1, 0.3, 1] as const;
 
 export const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -7,8 +8,8 @@ export const fadeInUp: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.8,
+      ease: cinematicEase,
     },
   },
 };
@@ -18,8 +19,8 @@ export const fadeIn: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.8,
+      ease: cinematicEase,
     },
   },
 };
@@ -30,8 +31,8 @@ export const scaleIn: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.6,
+      ease: cinematicEase,
     },
   },
 };
@@ -70,15 +71,13 @@ export const heroTitle: Variants = {
 };
 
 export const heroLetter: Variants = {
-  hidden: { opacity: 0, y: 50, rotateX: -90 },
+  hidden: { opacity: 0, y: 100 },
   visible: {
     opacity: 1,
     y: 0,
-    rotateX: 0,
     transition: {
-      type: "spring" as const,
-      damping: 12,
-      stiffness: 100,
+      duration: 1,
+      ease: cinematicEase,
     },
   },
 };
@@ -89,8 +88,8 @@ export const slideInLeft: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.8,
+      ease: cinematicEase,
     },
   },
 };
@@ -101,8 +100,8 @@ export const slideInRight: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.6,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.8,
+      ease: cinematicEase,
     },
   },
 };
@@ -113,21 +112,29 @@ export const projectCard: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.8,
+      ease: cinematicEase,
     },
   },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.3,
+      ease: cinematicEase
+    }
+  }
 };
 
 export const modalBackdrop: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.4, ease: cinematicEase },
   },
   exit: {
     opacity: 0,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.3, ease: cinematicEase },
   },
 };
 
@@ -138,8 +145,8 @@ export const modalContent: Variants = {
     scale: 1,
     y: 0,
     transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1] as const,
+      duration: 0.6,
+      ease: cinematicEase,
     },
   },
   exit: {

@@ -86,6 +86,10 @@ export default function BubbleMenu({
 
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
+
+    // Dispatch event to close any open modals (e.g. CaseStudyModal)
+    window.dispatchEvent(new CustomEvent('navigation-click'));
+
     setTimeout(() => {
       const element = document.querySelector(href);
       if (element) {
@@ -97,7 +101,7 @@ export default function BubbleMenu({
   return (
     <>
       <div
-        className={`bubble-menu ${useFixedPosition ? 'fixed' : 'absolute'} left-0 right-0 top-8 flex items-center justify-between gap-4 px-8 pointer-events-none z-[1001] ${className || ''}`}
+        className={`bubble-menu ${useFixedPosition ? 'fixed' : 'absolute'} left-0 right-0 top-8 flex items-center justify-between gap-4 px-8 pointer-events-none z-[9999] ${className || ''}`}
         style={style}
       >
         <motion.a
@@ -161,8 +165,8 @@ export default function BubbleMenu({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-8"
-            style={{ 
-              background: 'hsl(var(--background) / 0.95)', 
+            style={{
+              background: 'hsl(var(--background) / 0.95)',
               backdropFilter: 'blur(20px)',
             }}
           >
@@ -173,15 +177,14 @@ export default function BubbleMenu({
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
-                  transition={{ 
+                  transition={{
                     duration: 0.5,
                     delay: idx * 0.1,
                     type: "spring",
                     stiffness: 200,
                     damping: 15
                   }}
-                  className="flex-shrink-0"
-                  style={{ flex: '0 0 calc(33.333% - 1.5rem)' }}
+                  className="flex-shrink-0 w-full md:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)]"
                 >
                   <motion.a
                     href={item.href}
@@ -197,7 +200,7 @@ export default function BubbleMenu({
                       minHeight: '100px',
                       rotate: `${item.rotation ?? 0}deg`,
                     }}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.06,
                       backgroundColor: item.hoverStyles?.bgColor || 'hsl(42 58% 58%)',
                       color: item.hoverStyles?.textColor || '#ffffff',

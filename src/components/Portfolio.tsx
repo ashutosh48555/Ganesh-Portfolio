@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { projects, Project } from "@/lib/data";
 import { fadeInUp, staggerContainer, defaultViewport } from "@/lib/animations";
 import ProjectCard from "./ProjectCard";
@@ -33,6 +33,18 @@ const Portfolio = () => {
     setTimeout(() => setSelectedProject(null), 300);
   };
 
+  // Close active modal when global navigation occurs (e.g. from BubbleMenu)
+  // Close active modal when global navigation occurs
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (isModalOpen) {
+        handleCloseModal();
+      }
+    };
+    window.addEventListener('navigation-click', handleNavigation);
+    return () => window.removeEventListener('navigation-click', handleNavigation);
+  }, [isModalOpen]);
+
   return (
     <section id="portfolio" className="section-padding">
       <div className="container mx-auto">
@@ -54,46 +66,55 @@ const Portfolio = () => {
           </motion.h2>
         </motion.div>
 
-        {/* Category Filters */}
+        {/* Category Filters - Premium Glassmorphic Pills */}
         <motion.div
           variants={fadeInUp}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="flex flex-wrap justify-center gap-2 mb-12"
+          className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {categories.map((category) => (
             <motion.button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                activeCategory === category.id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground"
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 overflow-hidden group ${activeCategory === category.id
+                ? "text-black font-bold"
+                : "text-zinc-400 hover:text-white bg-zinc-900/50 border border-white/5 hover:border-white/20"
+                }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {category.label}
+              {activeCategory === category.id && (
+                <motion.div
+                  layoutId="activeCategory"
+                  className="absolute inset-0 bg-primary z-0"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{category.label}</span>
             </motion.button>
           ))}
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid - Masonry-style Layout Animation */}
         <motion.div
+          layout
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {filteredProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => handleProjectClick(project)}
-            />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onClick={() => handleProjectClick(project)}
+              />
+            ))}
+          </AnimatePresence>
         </motion.div>
       </div>
 

@@ -4,36 +4,38 @@ import Ballpit from "./Ballpit";
 const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background" />
-      
+      {/* Base premium dark background */}
+      <div className="absolute inset-0 bg-background" />
+
       {/* 3D Ballpit - Interactive physics balls */}
-      <div 
-        className="absolute inset-0 pointer-events-auto opacity-40"
+      {/* Using theme colors: Primary (Antique Gold), Muted (Grey), and Darker shades */}
+      <div
+        className="absolute inset-0 pointer-events-auto opacity-30"
         style={{ minHeight: '100vh' }}
       >
         <Ballpit
-          count={80}
-          gravity={0.005}
-          friction={0.998}
-          wallBounce={0.9}
+          count={65} // "More Balls" as requested (was 35)
+          gravity={0.01} // Stronger gravity for "falling in" 
+          friction={0.999} // Less friction = more movement
+          wallBounce={0.9} // More bounce
           followCursor={true}
-          colors={[0xD4A853, 0x8B7355, 0x4A3F35]}
+          // Colors: Antique Gold, Much Lighter Grey, White, accent Blue
+          colors={[0xD4A853, 0xA0A0A0, 0xFFFFFF, 0x4B5563]}
         />
       </div>
 
-      {/* Animated gradient orbs - layered on top */}
+      {/* Cinematic Fog / Nebulas Overlay (kept subtle for depth) */}
       <motion.div
-        className="absolute w-[800px] h-[800px] rounded-full opacity-15 pointer-events-none"
+        className="absolute w-[120vw] h-[100vh] rounded-[100%] opacity-[0.05] mix-blend-screen blur-[120px]"
         style={{
-          background: "radial-gradient(circle, hsl(42 58% 58% / 0.12) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 60%)",
           left: "-20%",
-          top: "-10%",
+          top: "-30%",
         }}
         animate={{
-          x: [0, 100, 50, 0],
-          y: [0, 50, 100, 0],
-          scale: [1, 1.1, 0.95, 1],
+          x: [0, 50, 0],
+          y: [0, 30, 0],
+          scale: [1, 1.1, 1],
         }}
         transition={{
           duration: 20,
@@ -41,103 +43,38 @@ const AnimatedBackground = () => {
           ease: "easeInOut",
         }}
       />
-      
+
+
+      {/* Anamorphic Lens Flare / Streak (very subtle) */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-10 pointer-events-none"
+        className="absolute h-[2px] w-[80%] left-[10%] top-[40%] opacity-[0.03] blur-[1px]"
         style={{
-          background: "radial-gradient(circle, hsl(42 58% 58% / 0.08) 0%, transparent 70%)",
-          right: "-10%",
-          top: "20%",
+          background: "linear-gradient(90deg, transparent, hsl(var(--primary)), transparent)",
         }}
         animate={{
-          x: [0, -80, -40, 0],
-          y: [0, 80, 40, 0],
-          scale: [1, 0.9, 1.1, 1],
+          opacity: [0.03, 0.06, 0.03],
+          scaleX: [1, 1.5, 1],
         }}
         transition={{
-          duration: 25,
+          duration: 8,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
 
-      {/* Flowing lines / mesh effect */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-[0.02] pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern
-            id="grid"
-            width="60"
-            height="60"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M 60 0 L 0 0 0 60"
-              fill="none"
-              stroke="hsl(42 58% 58%)"
-              strokeWidth="0.5"
-            />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-
-      {/* Animated lines that flow across */}
-      <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[30%] opacity-5 pointer-events-none"
+      {/* Grid Floor Effect (Perspective) - Bottom only */}
+      <div
+        className="absolute bottom-0 left-[-50%] w-[200%] h-[30vh] opacity-[0.03]"
         style={{
-          background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
-        }}
-        animate={{
-          x: ["-50%", "0%"],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
-      
-      <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[50%] opacity-5 pointer-events-none"
-        style={{
-          background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
-        }}
-        animate={{
-          x: ["0%", "-50%"],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
-      
-      <motion.div
-        className="absolute h-px w-[200%] left-[-50%] top-[70%] opacity-5 pointer-events-none"
-        style={{
-          background: "linear-gradient(90deg, transparent, hsl(42 58% 58%), transparent)",
-        }}
-        animate={{
-          x: ["-25%", "25%"],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "reverse",
+          background: `linear-gradient(transparent 0%, hsl(var(--primary)) 100%), 
+                       repeating-linear-gradient(90deg, transparent 0, transparent 49px, hsl(var(--primary)) 50px)`,
+          transform: "perspective(500px) rotateX(60deg)",
+          maskImage: "linear-gradient(to bottom, transparent, black)",
         }}
       />
 
-      {/* Subtle vignette overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at center, transparent 0%, hsl(240 20% 4% / 0.5) 100%)",
-        }}
-      />
+      {/* Noise / Grain is handled globally in index.css on body, but adding a specific texture layer here if needed */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
     </div>
   );
 };

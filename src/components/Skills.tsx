@@ -1,158 +1,90 @@
 import { motion } from "framer-motion";
-import {
-  Lightbulb,
-  Layers,
-  Blend,
-  Palette,
-  Play,
-  Box,
-  PenTool,
-  Sparkles,
-  Clapperboard,
-  Scissors,
-  Move,
-  Gamepad2,
-  Map,
-  Mountain,
-  Sun,
-} from "lucide-react";
-import { fadeInUp, staggerContainer, defaultViewport, scaleIn } from "@/lib/animations";
-import { coreSkills, vfxSkills, gameSkills } from "@/lib/data";
+import { useState } from "react";
+import { staggerContainer, defaultViewport } from "@/lib/animations";
+import { vfxSkills, gameSkills } from "@/lib/data";
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Lightbulb,
-  Layers,
-  Blend,
-  Palette,
-  Play,
-  Box,
-  PenTool,
-  Sparkles,
-  Clapperboard,
-  Scissors,
-  Move,
-  Gamepad2,
-  Map,
-  Mountain,
-  Sun,
+const KineticListItem = ({ text, index }: { text: string; index: number }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.5 }}
+      viewport={defaultViewport}
+      className="relative cursor-pointer group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Glitch/Ghost Effect on Hover */}
+      <span
+        className={`absolute inset-0 text-4xl sm:text-6xl md:text-8xl font-black text-primary/20 blur-sm transition-opacity duration-200 will-change-transform ${isHovered ? "opacity-100 translate-x-1" : "opacity-0"}`}
+        aria-hidden="true"
+      >
+        {text.toUpperCase()}
+      </span>
+
+      {/* Main Text */}
+      <span
+        className={`relative z-10 block text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter transition-all duration-300 ${isHovered ? "text-primary translate-x-4" : "text-input hover:text-foreground"}`} // text-input is usually dark grey/dim in dark mode, changing to more readable base if needed.
+        style={{
+          // Fallback/Enhancement if standard colors aren't punchy enough 
+          color: isHovered ? "hsl(var(--primary))" : "rgba(255, 255, 255, 0.2)",
+          WebkitTextStroke: isHovered ? "0px" : "1px rgba(255, 255, 255, 0.5)",
+        }}
+      >
+        {text.toUpperCase()}
+      </span>
+    </motion.li>
+  );
 };
 
 const Skills = () => {
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+
   return (
-    <section id="skills" className="section-padding">
+    <section id="skills" className="section-padding overflow-hidden">
       <div className="container mx-auto">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center mb-16"
+          className="mb-20"
         >
-          <motion.span
-            variants={fadeInUp}
-            className="text-primary text-sm font-medium tracking-widest uppercase"
-          >
-            Expertise
-          </motion.span>
-          <motion.h2 variants={fadeInUp} className="heading-lg mt-4">
-            Skills & Specializations
-          </motion.h2>
+          <h2 className="text-primary text-sm font-medium tracking-widest uppercase mb-4 block">Expertise</h2>
+          <p className="heading-lg text-white">Capability Stack</p>
         </motion.div>
 
-        {/* Core Strengths */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={defaultViewport}
-          className="grid md:grid-cols-3 gap-6 mb-16"
-        >
-          {coreSkills.map((skill, index) => {
-            const Icon = iconMap[skill.icon];
-            return (
-              <motion.div
-                key={skill.title}
-                variants={scaleIn}
-                whileHover={{ y: -5 }}
-                className="card-cinematic p-8 text-center group"
-              >
-                <motion.div
-                  className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  {Icon && <Icon className="w-8 h-8 text-primary" />}
-                </motion.div>
-                <h3 className="heading-md mb-3">{skill.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {skill.description}
-                </p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* VFX & Design Skills */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={defaultViewport}
-          className="mb-12"
-        >
-          <motion.h3
-            variants={fadeInUp}
-            className="text-lg font-semibold mb-6 text-center"
+        <div className="grid lg:grid-cols-2 gap-20">
+          {/* VFX Column */}
+          <div
+            className={`transition-opacity duration-500 ${hoveredCategory && hoveredCategory !== 'vfx' ? 'opacity-30 blur-sm' : 'opacity-100'}`}
+            onMouseEnter={() => setHoveredCategory('vfx')}
+            onMouseLeave={() => setHoveredCategory(null)}
           >
-            VFX & Design Skills
-          </motion.h3>
-          <div className="flex flex-wrap justify-center gap-4">
-            {vfxSkills.map((skill) => {
-              const Icon = iconMap[skill.icon];
-              return (
-                <motion.div
-                  key={skill.name}
-                  variants={scaleIn}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-secondary/50 rounded-full border border-border/50 hover:border-primary/30 transition-colors"
-                >
-                  {Icon && <Icon className="w-4 h-4 text-primary" />}
-                  <span className="text-sm">{skill.name}</span>
-                </motion.div>
-              );
-            })}
+            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">VFX & Compositing</h3>
+            <ul className="space-y-4">
+              {vfxSkills.map((skill, i) => (
+                <KineticListItem key={skill.name} text={skill.name} index={i} />
+              ))}
+            </ul>
           </div>
-        </motion.div>
 
-        {/* Game & Environment Work */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={defaultViewport}
-        >
-          <motion.h3
-            variants={fadeInUp}
-            className="text-lg font-semibold mb-6 text-center"
+          {/* Game Column - The one user complained about */}
+          <div
+            className={`transition-opacity duration-500 ${hoveredCategory && hoveredCategory !== 'game' ? 'opacity-30 blur-sm' : 'opacity-100'}`}
+            onMouseEnter={() => setHoveredCategory('game')}
+            onMouseLeave={() => setHoveredCategory(null)}
           >
-            Game & Environment Work
-          </motion.h3>
-          <div className="flex flex-wrap justify-center gap-4">
-            {gameSkills.map((skill) => {
-              const Icon = iconMap[skill.icon];
-              return (
-                <motion.div
-                  key={skill.name}
-                  variants={scaleIn}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-secondary/30 rounded-full border border-border/30 hover:border-primary/30 transition-colors"
-                >
-                  {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
-                  <span className="text-sm text-muted-foreground">{skill.name}</span>
-                </motion.div>
-              );
-            })}
+            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">Game & Environment</h3>
+            <ul className="space-y-4">
+              {gameSkills.map((skill, i) => (
+                <KineticListItem key={skill.name} text={skill.name} index={i + 5} />
+              ))}
+            </ul>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

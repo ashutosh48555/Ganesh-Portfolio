@@ -8,18 +8,19 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import ClickSpark from "@/components/ClickSpark";
+import Cursor from "@/components/Cursor";
 
 const Index = () => {
   return (
     <ClickSpark
-      sparkColor="hsl(42 58% 58%)"
-      sparkSize={12}
-      sparkRadius={25}
-      sparkCount={10}
-      duration={500}
-      extraScale={1.2}
+      sparkColor="hsl(var(--primary))"
+      sparkSize={10}
+      sparkRadius={20}
+      sparkCount={8}
+      duration={400}
     >
-      <div className="min-h-screen bg-background text-foreground film-grain">
+      <Cursor />
+      <div className="relative min-h-screen bg-background text-foreground film-grain">
         <AnimatedBackground />
         <Navigation />
         <main className="relative z-10">

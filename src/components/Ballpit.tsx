@@ -63,9 +63,9 @@ class ThreeScene {
   renderer!: WebGLRenderer;
   size: SizeData = { width: 0, height: 0, wWidth: 0, wHeight: 0, ratio: 0, pixelRatio: 0 };
   render: () => void = this.#render.bind(this);
-  onBeforeRender: (state: { elapsed: number; delta: number }) => void = () => {};
-  onAfterRender: (state: { elapsed: number; delta: number }) => void = () => {};
-  onAfterResize: (size: SizeData) => void = () => {};
+  onBeforeRender: (state: { elapsed: number; delta: number }) => void = () => { };
+  onAfterRender: (state: { elapsed: number; delta: number }) => void = () => { };
+  onAfterResize: (size: SizeData) => void = () => { };
   isDisposed: boolean = false;
 
   constructor(config: XConfig) {
@@ -96,7 +96,7 @@ class ThreeScene {
       }
     }
     if (!this.canvas) return;
-    
+
     this.canvas.style.display = 'block';
     const rendererOptions: WebGLRendererParameters = {
       canvas: this.canvas,
@@ -290,11 +290,12 @@ class Physics {
   #initializePositions() {
     const { config, positionData } = this;
     this.center.toArray(positionData, 0);
-    for (let i = 1; i < config.count; i++) {
+    for (let i = 0; i < config.count; i++) {
       const idx = 3 * i;
-      positionData[idx] = MathUtils.randFloatSpread(2 * config.maxX);
-      positionData[idx + 1] = MathUtils.randFloatSpread(2 * config.maxY);
-      positionData[idx + 2] = MathUtils.randFloatSpread(2 * config.maxZ);
+      // INITIAL: Spawn all balls high up (clustered) so they "come down" together
+      positionData[idx] = MathUtils.randFloatSpread(5);     // Spread X
+      positionData[idx + 1] = config.maxY + Math.random() * 5; // Start ABOVE the view
+      positionData[idx + 2] = MathUtils.randFloatSpread(5); // Spread Z
     }
   }
 
@@ -308,28 +309,53 @@ class Physics {
 
   update(deltaInfo: { delta: number }) {
     const { config, center, positionData, sizeData, velocityData } = this;
-    let startIdx = 0;
 
-    if (config.controlSphere0) {
-      startIdx = 1;
-      const firstVec = new Vector3().fromArray(positionData, 0);
-      firstVec.lerp(center, 0.1).toArray(positionData, 0);
-      new Vector3(0, 0, 0).toArray(velocityData, 0);
+    // RANDOM IMPULSE LOOP: Randomly kick balls to keep them moving
+    // Increased to 15% chance to ensure "constant balls move"
+    if (Math.random() < 0.15) {
+      const randomIdx = Math.floor(Math.random() * config.count);
+      const base = 3 * randomIdx;
+      velocityData[base] += (Math.random() - 0.5) * 0.02;     // X push
+      velocityData[base + 1] += (Math.random()) * 0.03;       // Y push (fly up)
+      velocityData[base + 2] += (Math.random() - 0.5) * 0.02; // Z push
     }
 
-    for (let idx = startIdx; idx < config.count; idx++) {
+    // REPULSION: If cursor is active (controlSphere0 is true logic reuse), push ALL balls away
+    if (config.controlSphere0) {
+      // "center" is the cursor intersection point from the Raycaster in the React component
+      for (let i = 0; i < config.count; i++) {
+        const base = 3 * i;
+        const pos = new Vector3().fromArray(positionData, base);
+        const dist = pos.distanceTo(center);
+
+        // Interaction Radius
+        if (dist < 4) {
+          const dir = new Vector3().subVectors(pos, center).normalize();
+          const force = (4 - dist) * 0.02; // Strength
+          velocityData[base] += dir.x * force;
+          velocityData[base + 1] += dir.y * force;
+          velocityData[base + 2] += dir.z * force;
+        }
+      }
+    }
+
+    for (let idx = 0; idx < config.count; idx++) {
       const base = 3 * idx;
       const pos = new Vector3().fromArray(positionData, base);
       const vel = new Vector3().fromArray(velocityData, base);
+
       vel.y -= deltaInfo.delta * config.gravity * sizeData[idx];
       vel.multiplyScalar(config.friction);
-      vel.clampLength(0, config.maxVelocity);
+
+      // Removed clamp to allow faster bursts
+      // vel.clampLength(0, config.maxVelocity);
+
       pos.add(vel);
       pos.toArray(positionData, base);
       vel.toArray(velocityData, base);
     }
 
-    for (let idx = startIdx; idx < config.count; idx++) {
+    for (let idx = 0; idx < config.count; idx++) {
       const base = 3 * idx;
       const pos = new Vector3().fromArray(positionData, base);
       const vel = new Vector3().fromArray(velocityData, base);
@@ -346,30 +372,25 @@ class Physics {
         if (dist < sumRadius) {
           const overlap = sumRadius - dist;
           const correction = diff.normalize().multiplyScalar(0.5 * overlap);
-          const velCorrection = correction.clone().multiplyScalar(Math.max(vel.length(), 1));
+
+          // More elastic collision
+          const velCorrection = correction.clone().multiplyScalar(0.1);
+
           pos.sub(correction);
           vel.sub(velCorrection);
+
           pos.toArray(positionData, base);
           vel.toArray(velocityData, base);
+
           otherPos.add(correction);
-          otherVel.add(correction.clone().multiplyScalar(Math.max(otherVel.length(), 1)));
+          otherVel.add(velCorrection); // Transfer energy
+
           otherPos.toArray(positionData, otherBase);
           otherVel.toArray(velocityData, otherBase);
         }
       }
 
-      if (config.controlSphere0) {
-        const diff = new Vector3().copy(new Vector3().fromArray(positionData, 0)).sub(pos);
-        const d = diff.length();
-        const sumRadius0 = radius + sizeData[0];
-        if (d < sumRadius0) {
-          const correction = diff.normalize().multiplyScalar(sumRadius0 - d);
-          const velCorrection = correction.clone().multiplyScalar(Math.max(vel.length(), 2));
-          pos.sub(correction);
-          vel.sub(velCorrection);
-        }
-      }
-
+      // Wall Collisions
       if (Math.abs(pos.x) + radius > config.maxX) {
         pos.x = Math.sign(pos.x) * (config.maxX - radius);
         vel.x = -vel.x * config.wallBounce;
@@ -381,8 +402,20 @@ class Physics {
           vel.y = -vel.y * config.wallBounce;
         }
       } else if (pos.y - radius < -config.maxY) {
-        pos.y = -config.maxY + radius;
-        vel.y = -vel.y * config.wallBounce;
+        // "Infinite Flow" Logic:
+        // Instead of just bouncing at the bottom and settling (disappearing),
+        // we have a 40% chance to RESPAWN the ball at the very top.
+        // This keeps the scene constantly filled with falling activity.
+        if (Math.random() < 0.4) {
+          pos.y = config.maxY + Math.random() * 5; // Reset to top
+          pos.x = MathUtils.randFloatSpread(config.maxX * 2); // Random X
+          pos.z = MathUtils.randFloatSpread(config.maxZ * 2); // Random Z
+          vel.set(0, -0.05, 0); // Slight downward velocity
+        } else {
+          // Standard bounce for the other 60%
+          pos.y = -config.maxY + radius;
+          vel.y = -vel.y * config.wallBounce * 1.2; // Extra bounce from floor
+        }
       }
 
       const maxBoundary = Math.max(config.maxZ, config.maxSize);
@@ -397,57 +430,7 @@ class Physics {
   }
 }
 
-class SubsurfaceMaterial extends MeshPhysicalMaterial {
-  uniforms: { [key: string]: { value: number } } = {
-    thicknessDistortion: { value: 0.1 },
-    thicknessAmbient: { value: 0 },
-    thicknessAttenuation: { value: 0.1 },
-    thicknessPower: { value: 2 },
-    thicknessScale: { value: 10 }
-  };
-
-  constructor(params: any) {
-    super(params);
-    (this as any).defines = { USE_UV: '' };
-    const self = this as any;
-    self.onBeforeCompile = (shader: any) => {
-      Object.assign(shader.uniforms, this.uniforms);
-      shader.fragmentShader = `
-        uniform float thicknessPower;
-        uniform float thicknessScale;
-        uniform float thicknessDistortion;
-        uniform float thicknessAmbient;
-        uniform float thicknessAttenuation;
-      ` + shader.fragmentShader;
-
-      shader.fragmentShader = shader.fragmentShader.replace(
-        'void main() {',
-        `
-        void RE_Direct_Scattering(const in IncidentLight directLight, const in vec2 uv, const in vec3 geometryPosition, const in vec3 geometryNormal, const in vec3 geometryViewDir, const in vec3 geometryClearcoatNormal, inout ReflectedLight reflectedLight) {
-          vec3 scatteringHalf = normalize(directLight.direction + (geometryNormal * thicknessDistortion));
-          float scatteringDot = pow(saturate(dot(geometryViewDir, -scatteringHalf)), thicknessPower) * thicknessScale;
-          #ifdef USE_COLOR
-            vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * vColor;
-          #else
-            vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * diffuse;
-          #endif
-          reflectedLight.directDiffuse += scatteringIllu * thicknessAttenuation * directLight.color;
-        }
-        void main() {
-        `
-      );
-
-      const lightsChunk = ShaderChunk.lights_fragment_begin.replaceAll(
-        'RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );',
-        `
-          RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );
-          RE_Direct_Scattering(directLight, vUv, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, reflectedLight);
-        `
-      );
-      shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_begin>', lightsChunk);
-    };
-  }
-}
+// SubsurfaceMaterial removed to fix shader errors. Using standard MeshPhysicalMaterial.
 
 const defaultConfig = {
   count: 200,
@@ -489,21 +472,28 @@ class Spheres extends InstancedMesh {
     const pmrem = new PMREMGenerator(renderer);
     const envTexture = pmrem.fromScene(roomEnv).texture;
     const geometry = new SphereGeometry(1, 32, 32);
-    const material = new SubsurfaceMaterial({ envMap: envTexture, ...config.materialParams });
-    // envMapRotation only exists in Three.js r152+
-    if ((material as any).envMapRotation) {
-      (material as any).envMapRotation.x = -Math.PI / 2;
-    }
+    const material = new MeshPhysicalMaterial({
+      roughness: config.materialParams.roughness,
+      metalness: config.materialParams.metalness,
+      clearcoat: config.materialParams.clearcoat,
+      clearcoatRoughness: config.materialParams.clearcoatRoughness,
+      envMap: envTexture,
+      ior: 1.5,
+      transmission: 0, // Disable transmission to avoid complexity if not needed, or tune carefully
+      thickness: 0
+    });
+    // @ts-ignore
+    if (material.envMapRotation) material.envMapRotation.x = -Math.PI / 2;
     super(geometry, material, config.count);
 
     this.config = config;
     this.physics = new Physics(config);
-    
+
     this.ambientLight = new AmbientLight(config.ambientColor, config.ambientIntensity);
     (this as any).add(this.ambientLight);
     this.light = new PointLight(config.colors[0], config.lightIntensity);
     (this as any).add(this.light);
-    
+
     this.setColors(config.colors);
   }
 
@@ -539,11 +529,7 @@ class Spheres extends InstancedMesh {
     const count = (this as any).count;
     for (let idx = 0; idx < count; idx++) {
       tempObject.position.fromArray(this.physics.positionData, 3 * idx);
-      if (idx === 0 && this.config.followCursor === false) {
-        tempObject.scale.setScalar(0);
-      } else {
-        tempObject.scale.setScalar(this.physics.sizeData[idx]);
-      }
+      tempObject.scale.setScalar(this.physics.sizeData[idx]);
       tempObject.updateMatrix();
       (this as any).setMatrixAt(idx, tempObject.matrix);
       if (idx === 0) this.light.position.copy(tempObject.position);
@@ -702,10 +688,10 @@ interface BallpitProps {
   colors?: number[];
 }
 
-const Ballpit = ({ 
-  className = '', 
-  followCursor = true, 
-  count = 100,
+const Ballpit = ({
+  className = '',
+  followCursor = true,
+  count = 30,
   gravity = 0.01,
   friction = 0.9975,
   wallBounce = 0.95,
@@ -780,10 +766,10 @@ const Ballpit = ({
   }, [followCursor, count, gravity, friction, wallBounce, colors]);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className={className}
-      style={{ width: '100%', height: '100%', display: 'block' }} 
+      style={{ width: '100%', height: '100%', display: 'block' }}
     />
   );
 };
