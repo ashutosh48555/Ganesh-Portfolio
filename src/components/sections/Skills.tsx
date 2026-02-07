@@ -53,7 +53,7 @@ const Skills = () => {
           className="mb-20"
         >
           <h2 className="text-primary text-sm font-medium tracking-widest uppercase mb-4 block">Expertise</h2>
-          <p className="heading-lg text-white">Capability Stack</p>
+          <p className="heading-lg text-white">Skills</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-20">
@@ -63,7 +63,7 @@ const Skills = () => {
             onMouseEnter={() => setHoveredCategory('vfx')}
             onMouseLeave={() => setHoveredCategory(null)}
           >
-            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">VFX & Compositing</h3>
+            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">Core VFX & 3D</h3>
             <ul className="space-y-4">
               {vfxSkills.map((skill, i) => (
                 <KineticListItem key={skill.name} text={skill.name} index={i} />
@@ -77,7 +77,7 @@ const Skills = () => {
             onMouseEnter={() => setHoveredCategory('game')}
             onMouseLeave={() => setHoveredCategory(null)}
           >
-            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">Game & Environment</h3>
+            <h3 className="text-xl font-bold mb-8 text-white/50 border-b border-white/10 pb-4">Design, Game & Motion</h3>
             <ul className="space-y-4">
               {gameSkills.map((skill, i) => (
                 <KineticListItem key={skill.name} text={skill.name} index={i + 5} />

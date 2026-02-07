@@ -3,7 +3,7 @@
 export interface Project {
   id: string;
   title: string;
-  category: "lighting" | "compositing" | "cg-integration" | "personal";
+  category: "lighting" | "matchmove" | "cg-integration" | "personal";
   categoryLabel: string;
   thumbnail: string;
   heroImage: string;
@@ -49,16 +49,16 @@ export const projects: Project[] = [
     year: "2024",
   },
   {
-    id: "film-compositing",
-    title: "Cinematic Compositing",
-    category: "compositing",
-    categoryLabel: "Compositing",
+    id: "film-matchmove",
+    title: "Cinematic Matchmove",
+    category: "matchmove",
+    categoryLabel: "Matchmove",
     thumbnail: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
     heroImage: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1920&q=80",
-    description: "Complex multi-layer compositing work for a feature film, combining practical effects with digital enhancements.",
-    challenge: "Seamlessly blending practical pyrotechnics with CG fire simulation and environment extensions.",
-    solution: "Layered approach with careful edge treatment, color matching, and atmospheric integration to maintain photorealistic quality.",
-    tools: ["Nuke", "Silhouette", "After Effects"],
+    description: "Complex matchmoving work for a feature film, ensuring perfect alignment of CG elements with live-action footage.",
+    challenge: "Tracking rapid camera movements and integrating CG elements seamlessly into a chaotic scene.",
+    solution: "Utilized advanced object tracking and 3D camera solving to create a rock-solid foundation for VFX integration.",
+    tools: ["3D Equalizer", "Maya", "Nuke"],
     year: "2023",
   },
   {
@@ -111,9 +111,9 @@ export const coreSkills = [
     icon: "Lightbulb",
   },
   {
-    title: "Compositing",
-    description: "Seamlessly blending multiple elements into a cohesive, photorealistic final image.",
-    icon: "Layers",
+    title: "Matchmove",
+    description: "Ensuring seamless integration of CG elements by perfectly tracking camera usage and object movement.",
+    icon: "Move",
   },
   {
     title: "CG Integration",
@@ -123,33 +123,36 @@ export const coreSkills = [
 ];
 
 export const vfxSkills = [
-  { name: "Texturing", icon: "Palette" },
-  { name: "Animation", icon: "Play" },
-  { name: "Modeling", icon: "Box" },
-  { name: "Sculpting", icon: "PenTool" },
-  { name: "FX", icon: "Sparkles" },
-  { name: "Motion Graphics", icon: "Clapperboard" },
-  { name: "Roto", icon: "Scissors" },
   { name: "Matchmove", icon: "Move" },
+  { name: "Cg Integration", icon: "Blend" },
+  { name: "Composting", icon: "Layers" },
+  { name: "FX", icon: "Sparkles" },
+  { name: "Roto", icon: "Scissors" },
+  { name: "Lighting", icon: "Lightbulb" },
+  { name: "Modeling", icon: "Box" },
 ];
 
 export const gameSkills = [
-  { name: "Base Game Designing", icon: "Gamepad2" },
   { name: "Level Design", icon: "Map" },
   { name: "Environment Design", icon: "Mountain" },
-  { name: "Real-Time Lighting", icon: "Sun" },
+  { name: "Basic Games Design", icon: "Gamepad2" },
+  { name: "Texturing", icon: "Palette" },
+  { name: "Animation", icon: "Play" },
+  { name: "Motion Graphics", icon: "Clapperboard" },
+  { name: "Video Editing", icon: "Film" },
 ];
 
 export const tools = [
+  { name: "PhotoShop 2025", category: "2D", icon: "Image" },
+  { name: "Premiere Pro 2025", category: "Editing", icon: "Film" },
+  { name: "After Effects 2025", category: "Motion", icon: "Sparkles" },
+  { name: "Maya 2025", category: "3D", icon: "Shapes" },
   { name: "Blender", category: "3D", icon: "Box" },
-  { name: "Maya", category: "3D", icon: "Shapes" },
+  { name: "Substance 2025", category: "Texturing", icon: "Palette" },
+  { name: "Silhouette 2025", category: "Compositing", icon: "Scissors" },
   { name: "Nuke", category: "Compositing", icon: "Layers" },
-  { name: "Silhouette", category: "Compositing", icon: "Scissors" },
-  { name: "After Effects", category: "Motion", icon: "Sparkles" },
-  { name: "Premiere Pro", category: "Editing", icon: "Film" },
-  { name: "Photoshop", category: "2D", icon: "Image" },
-  { name: "3D Equalizer", category: "Tracking", icon: "Target" },
-  { name: "Houdini", category: "FX", icon: "Flame" },
+  { name: "3d Equalizer", category: "Tracking", icon: "Target" },
+  { name: "Houdini FX", category: "FX", icon: "Flame" },
   { name: "Unreal Engine", category: "Real-Time", icon: "Gamepad2" },
 ];
 
@@ -171,8 +174,8 @@ export const navLinks = [
 export const bio = {
   name: "Ganesh",
   headline: "Creating clean, cinematic VFX visuals",
-  tagline: "Lighting • Compositing • CG Integration",
-  description: `Hi, I'm Ganesh. I'm a passionate VFX Artist who enjoys creating clean, cinematic visuals. I specialize in lighting, compositing, and CG integration, with a strong focus on realism and mood.
+  tagline: "Lighting • Matchmove • CG Integration",
+  description: `Hi, I'm Ganesh. I'm a passionate VFX Artist who enjoys creating clean, cinematic visuals. I specialize in lighting, matchmove, and CG integration, with a strong focus on realism and mood.
 
 I love working on shots that require attention to detail, accurate lighting, and believable visual effects. I'm constantly learning and improving my skills while exploring new techniques and workflows in VFX and real-time environments.`,
   email: "ganesh@example.com",

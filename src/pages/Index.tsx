@@ -1,14 +1,14 @@
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
-import Tools from "@/components/Tools";
-import Portfolio from "@/components/Portfolio";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import AnimatedBackground from "@/components/AnimatedBackground";
-import ClickSpark from "@/components/ClickSpark";
-import Cursor from "@/components/Cursor";
+import Navigation from "@/components/navigation/Navigation";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Skills from "@/components/sections/Skills";
+import Tools from "@/components/sections/Tools";
+import Portfolio from "@/components/sections/Portfolio";
+import Contact from "@/components/sections/Contact";
+import Footer from "@/components/sections/Footer";
+import AnimatedBackground from "@/components/effects/AnimatedBackground";
+import ClickSpark from "@/components/effects/ClickSpark";
+import Cursor from "@/components/effects/Cursor";
 
 const Index = () => {
   return (

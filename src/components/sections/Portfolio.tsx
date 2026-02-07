@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, Project } from "@/lib/data";
 import { fadeInUp, staggerContainer, defaultViewport } from "@/lib/animations";
-import ProjectCard from "./ProjectCard";
-import CaseStudyModal from "./CaseStudyModal";
+import ProjectCard from "@/components/project/ProjectCard";
+import CaseStudyModal from "@/components/project/CaseStudyModal";
 
 const categories = [
   { id: "all", label: "All" },
   { id: "lighting", label: "Lighting" },
-  { id: "compositing", label: "Compositing" },
+  { id: "matchmove", label: "Matchmove" },
   { id: "cg-integration", label: "CG Integration" },
   { id: "personal", label: "Personal" },
 ];

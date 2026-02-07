@@ -71,23 +71,25 @@ Ensure you have **Node.js** (v18+) and **npm** installed.
 
 ```
 src/
-├── components/        # UI Components
-│   ├── ui/           # Reusable base components (Button, Card, etc.)
-│   ├── icons/        # Custom SVG icons
-│   ├── Hero.tsx      # Landing section with magnetic text
-│   ├── Portfolio.tsx # Project gallery with modal
-│   └── ...
-├── lib/               # Utilities & Data
+├── components/
+│   ├── sections/     # Hero, About, Portfolio, etc.
+│   ├── effects/      # Visual effects (Particles, SmoothScroll)
+│   ├── navigation/   # Navbar & Bubble Menu
+│   ├── project/      # Project cards & modals
+│   ├── ui/           # Reusable base components (Shadcn UI)
+│   └── icons/        # Custom Icon components
+├── lib/              # Utilities & Data
 │   ├── animations.ts # Framer Motion variants
-│   ├── data.ts       # Portfolio content (Projects, Bio)
+│   ├── data.ts       # Portfolio content
 │   └── utils.ts      # Helper functions
-├── Pages/             # Route pages
-└── index.css          # Global styles & Tailwind directives
+├── pages/            # Route pages
+└── styles/           # Global styles
+    └── index.css     # Tailwind directives
 ```
 
 ## 🎨 Customizing
 
--   **Colors**: Update the CSS variables in `src/index.css` (e.g., `--primary`, `--background`).
+-   **Colors**: Update the CSS variables in `src/styles/index.css` (e.g., `--primary`, `--background`).
 -   **Content**: Edit `src/lib/data.ts` to update your bio, projects, and skills without touching the code.
 -   **Assets**: Place images in the `public/` folder and reference them in `data.ts`.
 
